@@ -3,6 +3,33 @@ var chats = new Meteor.Collection("chats");
 if (Meteor.isClient) {
   Meteor.subscribe("messages");
 
+  var soundSent = new buzz.sound("/sounds/sent", {
+      formats: [ "ogg", "mp3" ],
+      preload: true
+  });
+
+  var soundReceived = new buzz.sound("/sounds/received", {
+      formats: [ "ogg", "mp3" ],
+      preload: true
+  });
+
+  Template.chats.created = function() {
+    this.playSounds = false;
+    var self = this;
+    Meteor.setTimeout(function() {
+      self.playSounds = true;
+    }, 2000);
+    this.fxObserver = chats.find().observe({
+      added: function(doc) {
+        if (self.playSounds) {
+          if (doc.user !== Meteor.userId()) {
+            soundReceived.play();
+          }
+        }
+      }
+    });
+  };
+
   Template.chats.helpers({
     messages: function() {
       return chats.find({}, {sort: {createdOn: -1}});
@@ -27,6 +54,8 @@ if (Meteor.isClient) {
       if (e.which === 13) { // Return
         var message = e.target.value;
         e.target.value = '';
+        
+        soundSent.play();
 
         Meteor.call("addChat", {content: message})
       }
@@ -48,7 +77,7 @@ if (Meteor.isClient) {
     username: function() {
       return Meteor.user().profile ? Meteor.user().profile.name : '';
     }
-  })
+  });
 }
 
 if (Meteor.isServer) {
@@ -59,8 +88,6 @@ if (Meteor.isServer) {
   Meteor.methods({
     addChat: function(doc) {
       doc.user = this.userId;
-      // var user = Meteor.users.findOne(this.userId);
-      // doc.name = (user.profile && user.profile.name) ? user.profile.name || user.emails[0].address;
       doc.createdOn = (new Date()).getTime();
       chats.insert(doc);
     }

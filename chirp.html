@@ -11,14 +11,16 @@
 </head>
 
 <body>
-{{> loginButtons}}
+	<a style="float: right" href="https://github.com/brentjanderson/chirp" target="_blank">Get the code</a>
+	{{> loginButtons}}
 
-{{#if currentUser}}
-	{{> setup}}
-  {{> chats}}
-{{else}}
-	<h1>Log in to join the discussion</h1>
-{{/if}}
+	{{#if currentUser}}
+		{{> setup}}
+		{{> chats}}
+		{{> feedback}}
+	{{else}}
+		<h1>Log in to join the discussion</h1>
+	{{/if}}
 </body>
 
 <template name="chats">
@@ -33,4 +35,8 @@
 
 <template name="setup">
 	<p><strong>Username: </strong><input type="text" value="{{username}}"><button>Set Name</button></p>
+</template>
+
+<template name="feedback">
+	<p style="position: absolute; bottom: 10px; right: 10px;"><a class="btn btn-success" href="https://github.com/brentjanderson/chirp/issues" target="_blank">Got feedback?</a></p>
 </template>
