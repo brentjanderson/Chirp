@@ -11,8 +11,10 @@ if (Meteor.isClient) {
       var user = Meteor.users.findOne(this.user) || {};
       if (user.profile && user.profile.name) {
         return user.profile.name;
+      } else if (user && user.emails && user.emails[0]){
+        return user.emails[0].address;
       } else {
-        return Meteor.user().emails[0].address;
+        return "?";
       }
     },
     stamp: function() {
@@ -51,12 +53,14 @@ if (Meteor.isClient) {
 
 if (Meteor.isServer) {
   Meteor.publish("messages", function() {
-    return chats.find({}, {limit: 30, sort: {createdOn: -1}});
+    return [chats.find({}, {limit: 30, sort: {createdOn: -1}}), Meteor.users.find({},{fields: {profile: 1, emails: 1}})];
   });
 
   Meteor.methods({
     addChat: function(doc) {
       doc.user = this.userId;
+      // var user = Meteor.users.findOne(this.userId);
+      // doc.name = (user.profile && user.profile.name) ? user.profile.name || user.emails[0].address;
       doc.createdOn = (new Date()).getTime();
       chats.insert(doc);
     }
