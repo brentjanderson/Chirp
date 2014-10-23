@@ -29,7 +29,7 @@
 	<input autofocus="autofocus" type="text" class="form-control" placeholder="Your message here..."/>
 	<ul>
 		{{#each messages}}
-			<li title="{{stamp}}" class="{{userclass}}"><strong>{{name}}: </strong>{{content}}</li>
+			<li title="{{stamp}}" class="{{userclass}}"><strong>{{name}}: </strong>{{content}} <span>{{stamp}}</span></li>
 		{{/each}}
 	</ul>
 </template>
