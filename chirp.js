@@ -46,6 +46,13 @@ if (Meteor.isClient) {
     },
     stamp: function() {
       return moment(this.createdOn).format('H:mm:ss A');
+    },
+    userclass: function() {
+      if (this.user === Meteor.userId()) {
+        return 'me';
+      } else {
+        return 'them';
+      }
     }
   });
 

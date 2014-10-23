@@ -1,4 +1,26 @@
 /* CSS declarations go here */
 body {
-	margin-top: 2em;
+	margin: 2em;
+
+}
+
+li {
+	list-style: none;
+	margin-top: 3px;
+	margin-bottom: 3px;
+	padding: 7px;
+	background-color: rgba(0,0,0,0.1);
+	border-radius: 10px;
+}
+
+li.me {
+	background-color: rgba(69,194,236,.3);
+}
+
+li.them {
+	margin-left: 2em;
+}
+
+ul {
+	padding-left: 0px;
 }
